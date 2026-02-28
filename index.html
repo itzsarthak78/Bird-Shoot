@@ -1,41 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BirdArcher</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bird Archer - Sarthak's Arcade</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-
-<!-- MENU -->
-<div id="menu">
-    <h1>🏹 Bird Archer</h1>
-    <button onclick="startGame()">🎮 Play</button>
-    <button onclick="showLeaderboard()">🏆 Leaderboard</button>
-</div>
-
-<!-- LEADERBOARD -->
-<div id="leaderboard" class="hidden">
-    <h2>🏆 Top Players</h2>
-    <ul id="scoresList"></ul>
-    <button onclick="backToMenu()">⬅ Back</button>
-</div>
-
-<!-- GAME -->
-<div id="gameContainer" class="hidden">
-    <div id="hud">
-        <div id="score">Score: 0</div>
-        <div id="hearts">❤️❤️❤️</div>
-        <button onclick="goHome()">🏠</button>
+    <div class="game-container">
+        <!-- Decorative elements -->
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="sun"></div>
+        
+        <!-- Header with score and lives -->
+        <div class="game-header">
+            <div class="score-box" id="score">0</div>
+            <div class="brand">⚡SARTHAK⚡</div>
+            <div class="lives" id="lives">
+                <span class="heart">❤️</span>
+                <span class="heart">❤️</span>
+                <span class="heart">❤️</span>
+            </div>
+        </div>
+        
+        <!-- Game area where birds fly -->
+        <div class="game-area" id="gameArea">
+            <!-- Birds will be dynamically added here -->
+        </div>
+        
+        <!-- Archer section -->
+        <div class="archer-section">
+            <div class="archer" id="archer">
+                <div class="archer-body">
+                    <div class="head">
+                        <div class="hat">
+                            <div class="hat-feather"></div>
+                        </div>
+                    </div>
+                    <div class="bow"></div>
+                    <div class="bow-string"></div>
+                    <div class="arrow" id="arrow"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="instructions">
+            <p>🎯 Tap on birds to shoot! Miss = -1 ❤️</p>
+            <p>🌈 Hit Color Duck for +1 ❤️</p>
+        </div>
+        
+        <!-- Game Over Modal -->
+        <div class="modal" id="gameOverModal">
+            <div class="modal-content">
+                <h2>GAME OVER!</h2>
+                <div class="final-score" id="finalScore">Score: 0</div>
+                
+                <!-- Leaderboard -->
+                <div class="leaderboard">
+                    <h3>🏆 TOP PLAYERS 🏆</h3>
+                    <div class="leaderboard-list" id="leaderboard">
+                        <!-- Leaderboard entries will be dynamically added -->
+                    </div>
+                </div>
+                
+                <button class="play-again-btn" id="playAgainBtn">PLAY AGAIN</button>
+                <div class="brand-footer">Made by Sarthak ⚡</div>
+            </div>
+        </div>
     </div>
-    <canvas id="gameCanvas"></canvas>
-</div>
 
-<div id="branding">Made by Sarthak 👑</div>
-
-<script src="script.js"></script>
+    <script src="game.js"></script>
 </body>
-</html>
+                        </html>
