@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,30 +7,40 @@
 <link rel="stylesheet" href="style.css">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
+
 <body>
 
+<!-- Clouds -->
+<div class="cloud" style="top:80px;"></div>
+<div class="cloud" style="top:150px; animation-duration:40s;"></div>
+<div class="cloud" style="top:220px; animation-duration:35s;"></div>
+
+<!-- MENU -->
 <div id="menu">
     <h1>🏹 Duck Archery</h1>
-    <button onclick="startGame()">🎮 Play Game</button>
+    <button onclick="startGame()">🎮 Play</button>
     <button onclick="showLeaderboard()">🏆 Leaderboard</button>
 </div>
 
+<!-- LEADERBOARD -->
 <div id="leaderboard" class="hidden">
-    <h2>🏆 Top Scores</h2>
+    <h2>🏆 Top Players</h2>
     <ul id="scoresList"></ul>
     <button onclick="backToMenu()">⬅ Back</button>
 </div>
 
+<!-- GAME -->
 <div id="gameContainer" class="hidden">
     <div id="hud">
-        <span id="score">Score: 0</span>
-        <span id="hearts">❤️❤️❤️</span>
+        <div id="score">Score: 0</div>
+        <div id="hearts">❤️❤️❤️</div>
         <button id="homeBtn" onclick="goHome()">🏠</button>
     </div>
-
     <canvas id="gameCanvas"></canvas>
 </div>
 
+<div id="branding">Made by Sarthak 👑</div>
+
 <script src="script.js"></script>
 </body>
-          </html>
+</html>
