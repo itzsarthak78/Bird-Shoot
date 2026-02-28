@@ -1,31 +1,54 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+/* =========================
+   FORCE CLEAN START
+========================= */
 
-/* FORCE MAIN MENU ON LOAD */
-window.onload = function () {
+document.addEventListener("DOMContentLoaded", function () {
+    showMainMenu();
+});
+
+/* Always reset screens */
+function showMainMenu() {
     document.getElementById("menu").classList.remove("hidden");
     document.getElementById("leaderboard").classList.add("hidden");
     document.getElementById("gameContainer").classList.add("hidden");
-};
+}
 
-/* TELEGRAM INIT */
-const tg = window.Telegram.WebApp;
+/* =========================
+   TELEGRAM SAFE INIT
+========================= */
+
+const tg = window.Telegram?.WebApp;
+
 if (tg) {
     tg.expand();
     tg.BackButton.hide();
 }
+
+/* =========================
+   CANVAS SETUP
+========================= */
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+/* =========================
+   GAME VARIABLES
+========================= */
 
 let birds = [];
 let arrows = [];
 let score = 0;
 let lives = 3;
 let gameRunning = false;
-let birdInterval;
+let birdInterval = null;
 
-/* BIRD CLASS */
+/* =========================
+   BIRD CLASS
+========================= */
+
 class Bird {
     constructor(special = false) {
         this.x = -40;
@@ -35,7 +58,9 @@ class Bird {
         this.special = special;
     }
 
-    update() { this.x += this.speed; }
+    update() {
+        this.x += this.speed;
+    }
 
     draw() {
         ctx.beginPath();
@@ -45,7 +70,10 @@ class Bird {
     }
 }
 
-/* ARROW CLASS */
+/* =========================
+   ARROW CLASS
+========================= */
+
 class Arrow {
     constructor(x, y) {
         this.x = 60;
@@ -59,8 +87,8 @@ class Arrow {
         let dx = this.tx - this.x;
         let dy = this.ty - this.y;
         let dist = Math.sqrt(dx * dx + dy * dy);
-        this.x += dx / dist * this.speed;
-        this.y += dy / dist * this.speed;
+        this.x += (dx / dist) * this.speed;
+        this.y += (dy / dist) * this.speed;
     }
 
     draw() {
@@ -69,11 +97,18 @@ class Arrow {
     }
 }
 
+/* =========================
+   SPAWN BIRDS
+========================= */
+
 function spawnBird() {
     birds.push(new Bird(Math.random() < 0.15));
 }
 
-/* GAME LOOP */
+/* =========================
+   GAME LOOP
+========================= */
+
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -94,6 +129,7 @@ function update() {
         birds.forEach((bird, bi) => {
             let dx = arrow.x - bird.x;
             let dy = arrow.y - bird.y;
+
             if (Math.sqrt(dx * dx + dy * dy) < bird.radius) {
                 if (bird.special) {
                     lives = Math.min(lives + 1, 3);
@@ -112,19 +148,28 @@ function update() {
     if (gameRunning) requestAnimationFrame(update);
 }
 
-/* LIFE SYSTEM */
+/* =========================
+   LIFE SYSTEM
+========================= */
+
 function loseLife() {
     lives--;
     if (lives <= 0) endGame();
 }
 
-/* SHOOT */
+/* =========================
+   SHOOT
+========================= */
+
 canvas.addEventListener("click", e => {
     if (!gameRunning) return;
     arrows.push(new Arrow(e.clientX, e.clientY));
 });
 
-/* START GAME */
+/* =========================
+   START GAME
+========================= */
+
 function startGame() {
     document.getElementById("menu").classList.add("hidden");
     document.getElementById("leaderboard").classList.add("hidden");
@@ -136,43 +181,32 @@ function startGame() {
     arrows = [];
     gameRunning = true;
 
-    clearInterval(birdInterval);
+    if (birdInterval) clearInterval(birdInterval);
     birdInterval = setInterval(spawnBird, 1500);
 
     update();
 }
 
-/* END GAME */
+/* =========================
+   END GAME
+========================= */
+
 function endGame() {
     gameRunning = false;
-    clearInterval(birdInterval);
+
+    if (birdInterval) clearInterval(birdInterval);
+
     saveScore(score);
+
     alert("Game Over! Score: " + score);
-    goHome();
+
+    showMainMenu();
 }
 
-/* HOME */
-function goHome() {
-    document.getElementById("gameContainer").classList.add("hidden");
-    document.getElementById("menu").classList.remove("hidden");
-}
+/* =========================
+   LEADERBOARD
+========================= */
 
-/* LEADERBOARD SAVE */
-function saveScore(score) {
-    let user = tg?.initDataUnsafe?.user;
-    let name = user ? user.first_name : "Guest";
-    let username = user?.username ? "@" + user.username : "";
-
-    let scores = JSON.parse(localStorage.getItem("duckScores")) || [];
-
-    scores.push({ name, username, score });
-    scores.sort((a, b) => b.score - a.score);
-    scores = scores.slice(0, 10);
-
-    localStorage.setItem("duckScores", JSON.stringify(scores));
-}
-
-/* SHOW LEADERBOARD */
 function showLeaderboard() {
     document.getElementById("menu").classList.add("hidden");
     document.getElementById("leaderboard").classList.remove("hidden");
@@ -193,9 +227,28 @@ function showLeaderboard() {
     });
 }
 
-/* BACK */
+/* =========================
+   SAVE SCORE
+========================= */
+
+function saveScore(score) {
+    let user = tg?.initDataUnsafe?.user;
+    let name = user ? user.first_name : "Guest";
+    let username = user?.username ? "@" + user.username : "";
+
+    let scores = JSON.parse(localStorage.getItem("duckScores")) || [];
+
+    scores.push({ name, username, score });
+    scores.sort((a, b) => b.score - a.score);
+    scores = scores.slice(0, 10);
+
+    localStorage.setItem("duckScores", JSON.stringify(scores));
+}
+
+/* =========================
+   BACK
+========================= */
+
 function backToMenu() {
-    document.getElementById("leaderboard").classList.add("hidden");
-    document.getElementById("gameContainer").classList.add("hidden");
-    document.getElementById("menu").classList.remove("hidden");
-        }
+    showMainMenu();
+    }
