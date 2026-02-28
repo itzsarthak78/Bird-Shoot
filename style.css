@@ -1,93 +1,160 @@
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Comic Sans MS, cursive;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Comic Sans MS, cursive;
 }
 
 body{
-overflow:hidden;
-background:linear-gradient(#87CEFA,#4CAF50);
+    overflow:hidden;
+    background:linear-gradient(#87CEFA,#4CAF50);
 }
 
-/* SCREENS */
-#menu,#leaderboard{
-position:absolute;
-width:100%;
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,0.3);
+/* =========================
+   ORANGE MAIN MENU
+========================= */
+
+#menu{
+    position:absolute;
+    width:100%;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ff8c00,#ff5722);
+    animation:menuPop 0.8s ease;
 }
 
-.hidden{
-display:none;
+@keyframes menuPop{
+    from{transform:scale(0.8);opacity:0;}
+    to{transform:scale(1);opacity:1;}
 }
 
-h1{
-font-size:45px;
-color:white;
-margin-bottom:30px;
+#menu h1{
+    font-size:50px;
+    color:white;
+    margin-bottom:30px;
+    text-shadow:3px 3px rgba(0,0,0,0.3);
 }
 
-button{
-padding:14px 35px;
-margin:10px;
-font-size:20px;
-border-radius:30px;
-border:none;
-cursor:pointer;
-background:linear-gradient(45deg,#ff9800,#ff5722);
-color:white;
-transition:0.3s;
+#menu button{
+    padding:15px 40px;
+    margin:12px;
+    font-size:22px;
+    border-radius:40px;
+    border:none;
+    cursor:pointer;
+    background:white;
+    color:#ff5722;
+    font-weight:bold;
+    transition:0.3s;
 }
 
-button:hover{
-transform:scale(1.1);
+#menu button:hover{
+    transform:scale(1.1);
+    background:#ffe0b2;
 }
 
-/* HUD */
-#hud{
-position:absolute;
-top:15px;
-width:100%;
-display:flex;
-justify-content:space-between;
-padding:0 20px;
-font-size:20px;
-color:white;
+/* =========================
+   LEADERBOARD SCREEN
+========================= */
+
+#leaderboard{
+    position:absolute;
+    width:100%;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,0.6);
 }
 
-#hearts{
-animation:heartBeat 1.2s infinite;
-}
-
-@keyframes heartBeat{
-0%{transform:scale(1);}
-50%{transform:scale(1.2);}
-100%{transform:scale(1);}
-}
-
-#gameCanvas{
-width:100%;
-height:100vh;
-display:block;
-cursor:crosshair;
-}
-
-#branding{
-position:absolute;
-bottom:10px;
-width:100%;
-text-align:center;
-color:white;
-font-size:14px;
+#leaderboard h2{
+    color:white;
+    margin-bottom:20px;
 }
 
 #scoresList{
-list-style:none;
-font-size:20px;
-color:white;
+    list-style:none;
+    font-size:20px;
+    color:white;
+    margin-bottom:20px;
 }
+
+#leaderboard button{
+    padding:12px 30px;
+    border-radius:30px;
+    border:none;
+    background:#ff9800;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+#leaderboard button:hover{
+    transform:scale(1.1);
+}
+
+/* =========================
+   GAME HUD
+========================= */
+
+#hud{
+    position:absolute;
+    top:15px;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    padding:0 20px;
+    font-size:20px;
+    color:white;
+}
+
+#score{
+    background:#ff5722;
+    padding:8px 18px;
+    border-radius:25px;
+}
+
+#hearts{
+    font-size:24px;
+    animation:heartBeat 1.2s infinite;
+}
+
+@keyframes heartBeat{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+
+#gameCanvas{
+    width:100%;
+    height:100vh;
+    display:block;
+    cursor:crosshair;
+}
+
+/* =========================
+   BRANDING
+========================= */
+
+#branding{
+    position:absolute;
+    bottom:10px;
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:14px;
+    opacity:0.8;
+}
+
+/* =========================
+   UTIL
+========================= */
+
+.hidden{
+    display:none;
+  }
