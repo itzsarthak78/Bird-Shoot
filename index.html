@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duck Archery</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+<div id="menu">
+    <h1>🏹 Duck Archery</h1>
+    <button onclick="startGame()">🎮 Play Game</button>
+    <button onclick="showLeaderboard()">🏆 Leaderboard</button>
+</div>
+
+<div id="leaderboard" class="hidden">
+    <h2>🏆 Top Scores</h2>
+    <ul id="scoresList"></ul>
+    <button onclick="backToMenu()">⬅ Back</button>
+</div>
+
+<div id="gameContainer" class="hidden">
+    <div id="hud">
+        <span id="score">Score: 0</span>
+        <span id="hearts">❤️❤️❤️</span>
+        <button id="homeBtn" onclick="goHome()">🏠</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+</div>
+
+<script src="script.js"></script>
+</body>
+          </html>
