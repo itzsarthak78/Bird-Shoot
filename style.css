@@ -1,112 +1,110 @@
-/* ===========================
-   GLOBAL RESET
-=========================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Comic Sans MS, cursive;
 }
 
-body {
-    overflow: hidden;
-    background: linear-gradient(-45deg, #4facfe, #00f2fe, #43e97b, #38f9d7);
-    background-size: 400% 400%;
-    animation: skyGradient 12s ease infinite;
+body{
+    overflow:hidden;
+    background:linear-gradient(#87CEFA,#4CAF50);
 }
 
-/* Animated Sky */
-@keyframes skyGradient {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
+/* Clouds */
+.cloud{
+    position:absolute;
+    width:180px;
+    height:60px;
+    background:white;
+    border-radius:50px;
+    opacity:0.5;
+    animation:cloudMove 30s linear infinite;
+}
+@keyframes cloudMove{
+    from{transform:translateX(-300px);}
+    to{transform:translateX(120vw);}
 }
 
-/* ===========================
-   MENU SCREEN
-=========================== */
-
-#menu, #leaderboard {
-    position: absolute;
-    width: 100%;
-    height: 100vh;
-    backdrop-filter: blur(20px);
-    background: rgba(0,0,0,0.35);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 1.2s ease;
+/* MENU */
+#menu, #leaderboard{
+    position:absolute;
+    width:100%;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,0.3);
+    backdrop-filter:blur(10px);
 }
 
-@keyframes fadeIn {
-    from {opacity: 0; transform: scale(1.1);}
-    to {opacity: 1; transform: scale(1);}
+h1{
+    font-size:50px;
+    color:white;
+    margin-bottom:30px;
 }
 
-h1 {
-    font-size: 60px;
-    color: #fff;
-    text-shadow: 0 0 20px rgba(255,255,255,0.8);
-    margin-bottom: 30px;
-    letter-spacing: 3px;
+button{
+    padding:15px 35px;
+    margin:10px;
+    font-size:20px;
+    border-radius:30px;
+    border:none;
+    cursor:pointer;
+    background:linear-gradient(45deg,#ff9800,#ff5722);
+    color:white;
+    transition:0.3s;
+}
+button:hover{
+    transform:scale(1.1);
 }
 
-/* ===========================
-   BUTTON STYLE
-=========================== */
-
-button {
-    padding: 15px 40px;
-    margin: 15px;
-    font-size: 20px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    background: linear-gradient(45deg, #ff512f, #dd2476);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    transition: 0.4s ease;
+/* HUD */
+#hud{
+    position:absolute;
+    top:15px;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    padding:0 20px;
+    font-size:22px;
+    color:white;
 }
 
-button:hover {
-    transform: translateY(-6px) scale(1.05);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+#hearts{
+    animation:heartBeat 1.5s infinite;
+}
+@keyframes heartBeat{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
 }
 
-/* ===========================
-   GAME HUD
-=========================== */
-
-#hud {
-    position: absolute;
-    top: 15px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 30px;
-    color: white;
-    font-size: 22px;
-    z-index: 10;
+#gameCanvas{
+    width:100%;
+    height:100vh;
+    display:block;
+    cursor:crosshair;
 }
 
-#score {
-    text-shadow: 0 0 10px #fff;
+#branding{
+    position:absolute;
+    bottom:10px;
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:14px;
 }
 
-#hearts {
-    animation: heartbeat 1.5s infinite;
+.hidden{
+    display:none;
 }
 
-@keyframes heartbeat {
-    0% {transform: scale(1);}
-    25% {transform: scale(1.1);}
-    50% {transform: scale(1);}
-    75% {transform: scale(1.1);}
-    100% {transform: scale(1);}
-}
-
-/* ===========================
+#scoresList{
+    list-style:none;
+    font-size:22px;
+    color:white;
+}/* ===========================
    CANVAS
 =========================== */
 
