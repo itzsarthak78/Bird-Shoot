@@ -1,76 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bird Archer - Sarthak's Arcade</title>
-    <link rel="stylesheet" href="styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Hill Climb Real Suspension</title>
+<style>
+body{margin:0;overflow:hidden;background:#87CEEB;font-family:Arial;}
+canvas{display:block;}
+.controls{
+position:fixed;bottom:20px;width:100%;
+display:flex;justify-content:space-between;
+padding:0 40px;box-sizing:border-box;
+}
+.btn{
+width:80px;height:80px;border-radius:50%;
+border:none;font-size:25px;
+background:rgba(0,0,0,0.5);
+color:white;
+}
+.hud{
+position:fixed;top:10px;left:10px;
+color:white;font-weight:bold;
+text-shadow:1px 1px 3px black;
+}
+</style>
 </head>
 <body>
-    <div class="game-container">
-        <!-- Decorative elements -->
-        <div class="cloud cloud1"></div>
-        <div class="cloud cloud2"></div>
-        <div class="sun"></div>
-        
-        <!-- Header with score and lives -->
-        <div class="game-header">
-            <div class="score-box" id="score">0</div>
-            <div class="brand">⚡SARTHAK⚡</div>
-            <div class="lives" id="lives">
-                <span class="heart">❤️</span>
-                <span class="heart">❤️</span>
-                <span class="heart">❤️</span>
-            </div>
-        </div>
-        
-        <!-- Game area where birds fly -->
-        <div class="game-area" id="gameArea">
-            <!-- Birds will be dynamically added here -->
-        </div>
-        
-        <!-- Archer section -->
-        <div class="archer-section">
-            <div class="archer" id="archer">
-                <div class="archer-body">
-                    <div class="head">
-                        <div class="hat">
-                            <div class="hat-feather"></div>
-                        </div>
-                    </div>
-                    <div class="bow"></div>
-                    <div class="bow-string"></div>
-                    <div class="arrow" id="arrow"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Instructions -->
-        <div class="instructions">
-            <p>🎯 Tap on birds to shoot! Miss = -1 ❤️</p>
-            <p>🌈 Hit Color Duck for +1 ❤️</p>
-        </div>
-        
-        <!-- Game Over Modal -->
-        <div class="modal" id="gameOverModal">
-            <div class="modal-content">
-                <h2>GAME OVER!</h2>
-                <div class="final-score" id="finalScore">Score: 0</div>
-                
-                <!-- Leaderboard -->
-                <div class="leaderboard">
-                    <h3>🏆 TOP PLAYERS 🏆</h3>
-                    <div class="leaderboard-list" id="leaderboard">
-                        <!-- Leaderboard entries will be dynamically added -->
-                    </div>
-                </div>
-                
-                <button class="play-again-btn" id="playAgainBtn">PLAY AGAIN</button>
-                <div class="brand-footer">Made by Sarthak ⚡</div>
-            </div>
-        </div>
-    </div>
 
-    <script src="game.js"></script>
+<canvas id="game"></canvas>
+
+<div class="hud">
+Speed: <span id="speed">0</span>
+</div>
+
+<div class="controls">
+<button class="btn" id="brake">⛔</button>
+<button class="btn" id="gas">⛽</button>
+</div>
+
+<script>
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let gravity=0.6;
+let terrain=[];
+let offset=0;
+
+function generateTerrain(){
+for(let i=0;i<8000;i++){
+terrain.push(Math.sin(i*0.02)*80+canvas.height-200);
+}
+}
+generateTerrain();
+
+let car={
+x:300,
+y:300,
+vx:0,
+vy:0,
+angle:0,
+angularVelocity:0,
+width:120,
+height:40
+};
+
+let wheelBase=100;
+let restLength=50;
+let stiffness=0.4;
+let damping=0.3;
+
+let gas=false,brake=false;
+
+document.getElementById("gas").ontouchstart=()=>gas=true;
+document.getElementById("gas").ontouchend=()=>gas=false;
+document.getElementById("brake").ontouchstart=()=>brake=true;
+document.getElementById("brake").ontouchend=()=>brake=false;
+
+function getGroundY(x){
+return terrain[Math.floor(x)]||canvas.height;
+}
+
+function update(){
+
+if(gas) car.vx+=0.3;
+if(brake) car.vx-=0.2;
+
+car.vy+=gravity;
+car.x+=car.vx;
+car.y+=car.vy;
+
+car.vx*=0.99;
+
+let leftWheelX=car.x-wheelBase/2;
+let rightWheelX=car.x+wheelBase/2;
+
+let leftGround=getGroundY(leftWheelX+offset);
+let rightGround=getGroundY(rightWheelX+offset);
+
+let leftDist=leftGround-(car.y+restLength);
+let rightDist=rightGround-(car.y+restLength);
+
+let leftForce=0,rightForce=0;
+
+if(leftDist<0){
+let compression=-leftDist;
+leftForce=compression*stiffness;
+car.vy-=leftForce;
+}
+
+if(rightDist<0){
+let compression=-rightDist;
+rightForce=compression*stiffness;
+car.vy-=rightForce;
+}
+
+let angleDiff=(rightGround-leftGround)/wheelBase;
+car.angle=angleDiff;
+
+if(car.x>canvas.width/2){
+offset+=car.vx;
+car.x=canvas.width/2;
+}
+
+document.getElementById("speed").innerText=Math.floor(car.vx*10);
+}
+
+function drawTerrain(){
+ctx.beginPath();
+ctx.moveTo(0,canvas.height);
+for(let i=0;i<canvas.width;i++){
+ctx.lineTo(i,terrain[Math.floor(i+offset)]);
+}
+ctx.lineTo(canvas.width,canvas.height);
+ctx.fillStyle="#228B22";
+ctx.fill();
+}
+
+function drawCar(){
+
+ctx.save();
+ctx.translate(car.x,car.y);
+ctx.rotate(car.angle);
+
+ctx.fillStyle="red";
+ctx.fillRect(-car.width/2,-car.height/2,car.width,car.height);
+
+ctx.fillStyle="black";
+ctx.beginPath();
+ctx.arc(-wheelBase/2,restLength,20,0,Math.PI*2);
+ctx.arc(wheelBase/2,restLength,20,0,Math.PI*2);
+ctx.fill();
+
+ctx.strokeStyle="yellow";
+ctx.beginPath();
+ctx.moveTo(-wheelBase/2,0);
+ctx.lineTo(-wheelBase/2,restLength);
+ctx.moveTo(wheelBase/2,0);
+ctx.lineTo(wheelBase/2,restLength);
+ctx.stroke();
+
+ctx.restore();
+}
+
+function loop(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+update();
+drawTerrain();
+drawCar();
+requestAnimationFrame(loop);
+}
+
+loop();
+</script>
+
 </body>
-                        </html>
+</html>
